@@ -7,6 +7,9 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 
 namespace AsterCalc.Function
 {
@@ -19,12 +22,14 @@ namespace AsterCalc.Function
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string timestamp = req.Query["timestamp"];
-            string loggerName = req.Query["loggerName"];
-            string loggerLevel = req.Query["loggerLevel"];
-            string message = req.Query["message"];
+            string body = req.Form["Log"];
+            int logIndex = body.IndexOf('=');
+            string message = body.Substring(logIndex);
 
-            log.LogInformation($"{timestamp}-{loggerName}-{loggerLevel}-{message}");
+            var pattern = new Regex("[\"\\=<>/]");
+            message = pattern.Replace(message,"");
+
+            log.LogInformation($"{message}");
 
             return new OkObjectResult(null);
         }
