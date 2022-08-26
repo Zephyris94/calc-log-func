@@ -17,16 +17,28 @@ namespace AsterCalc.Function
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string body = req.Form["Log"];
-            int logIndex = body.IndexOf('=');
-            string message = body.Substring(logIndex);
+            string date = req.Form["Date"];
+            string level = req.Form["Level"];
+            string logger = req.Form["Logger"];
+            string message = req.Form["Message"];
 
-            var pattern = new Regex("[\"\\=<>/]");
-            message = pattern.Replace(message,"");
+            date = ExtractData(date);
+            level = ExtractData(level);
+            logger = ExtractData(logger);
+            message = ExtractData(message);
 
-            log.LogInformation($"{message}");
+            log.LogInformation($"{date}-{level}-{logger}-{message}");
 
             return new OkObjectResult(null);
+        }
+
+        private static string ExtractData(string data){
+            var index = data.IndexOf(":");
+            var newStr = data.Substring(index+1);
+            Regex rx = new Regex("\"(.*?)\"");
+            var result = rx.Match(newStr).Value;
+            result = result.Replace("\"","");
+            return result;
         }
     }
 }
