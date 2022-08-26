@@ -39,4 +39,4 @@ jobs:
           app-name: 'aster-calc-log'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7BE47CD477614B99B9A3EA33033DC0DF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C161263987D48088D088716D36578B9 }}
